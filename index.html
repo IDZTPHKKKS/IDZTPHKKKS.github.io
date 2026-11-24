@@ -1,246 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shyaam Mahesh</title>
+<meta name="description" content="Shyaam Mahesh — fluid mechanics, robotics, and when learned models can be trusted.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: one strong shape. Huge name, a round window onto my own turbulence simulation behind it,
-   one line about me, then a bento grid of research clips rendered from my data. */
 :root {
-  --bg: #fbfbfa;
-  --tile: #f1f1f3;
-  --ink: #111114;
-  --muted: #6c6c74;
-  --line: #e4e4e8;
-  --blue: #2f6fe4;
-  --coral: #f06a3c;
-  --name: "Inter Tight", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
-  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --bg: #eef0f5;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-strong: rgba(255, 255, 255, 0.72);
+  --edge: rgba(255, 255, 255, 0.75);
+  --hair: rgba(0, 0, 0, 0.06);
+  --shadow: 0 1px 1px rgba(0,0,0,0.03), 0 8px 30px rgba(30, 40, 80, 0.08);
+  --accent: #0a66d8;
+  --blob1: #c9d8ff;
+  --blob2: #e6d6ff;
+  --blob3: #cdeee8;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e0e11; --tile: #18181c; --ink: #f2f2f4; --muted: #9a9aa4; --line: #26262c;
-    --blue: #7ea6ff; --coral: #ff8a5c; color-scheme: dark;
+    --bg: #0b0c10; --ink: #f5f5f7; --muted: #a1a1a6;
+    --glass: rgba(40, 42, 50, 0.45); --glass-strong: rgba(36, 38, 46, 0.7);
+    --edge: rgba(255, 255, 255, 0.10); --hair: rgba(255, 255, 255, 0.08);
+    --shadow: 0 1px 1px rgba(0,0,0,0.2), 0 12px 40px rgba(0,0,0,0.35);
+    --accent: #4da3ff;
+    --blob1: #1d2a55; --blob2: #2e1f4a; --blob3: #113a37;
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0e0e11; --tile: #18181c; --ink: #f2f2f4; --muted: #9a9aa4; --line: #26262c;
-  --blue: #7ea6ff; --coral: #ff8a5c; color-scheme: dark;
+  --bg: #0b0c10; --ink: #f5f5f7; --muted: #a1a1a6;
+  --glass: rgba(40, 42, 50, 0.45); --glass-strong: rgba(36, 38, 46, 0.7);
+  --edge: rgba(255, 255, 255, 0.10); --hair: rgba(255, 255, 255, 0.08);
+  --shadow: 0 1px 1px rgba(0,0,0,0.2), 0 12px 40px rgba(0,0,0,0.35);
+  --accent: #4da3ff;
+  --blob1: #1d2a55; --blob2: #2e1f4a; --blob3: #113a37;
+  color-scheme: dark;
 }
-[hidden] { display: none !important; }
+
+* { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
+  margin: 0; min-height: 100vh;
   background: var(--bg); color: var(--ink);
   font-family: var(--sans); font-size: 16px; line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-a { color: inherit; }
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
-.wrap {
-  max-width: 1240px; margin: 0 auto;
-  padding-left: max(24px, env(safe-area-inset-left, 0px));
-  padding-right: max(24px, env(safe-area-inset-right, 0px));
+/* soft static colour behind the glass */
+.backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.backdrop span { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.9; }
+.backdrop .b1 { width: 52vw; height: 52vw; left: -12vw; top: -14vw; background: var(--blob1); }
+.backdrop .b2 { width: 46vw; height: 46vw; right: -14vw; top: 18vh; background: var(--blob2); }
+.backdrop .b3 { width: 40vw; height: 40vw; left: 22vw; bottom: -18vw; background: var(--blob3); }
+
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
+
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  backdrop-filter: saturate(180%) blur(24px);
+  border: 1px solid var(--edge);
+  box-shadow: var(--shadow);
 }
 
-/* top line */
-.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; font-size: 14px; flex-wrap: wrap; }
-.top .who { font-weight: 500; text-decoration: none; }
-.top nav { display: flex; gap: 22px; align-items: center; }
-.top nav a { text-decoration: none; color: var(--muted); }
-.top nav a:hover { color: var(--ink); }
-.clock { color: var(--muted); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right)); }
+
+/* nav */
+.nav {
+  position: sticky; top: 14px; z-index: 10;
+  margin: 14px auto 0; width: fit-content; max-width: calc(100% - 32px);
+  display: flex; align-items: center; gap: 4px; padding: 6px;
+  border-radius: 999px; background: var(--glass-strong);
+}
+.nav a { padding: 7px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--muted); transition: color .15s, background .15s; }
+.nav a:hover { color: var(--ink); background: var(--hair); }
+.nav .me { color: var(--ink); font-weight: 600; }
 
 /* hero */
-.hero { position: relative; padding-block: 6vh 10vh; }
-.orb {
-  position: absolute; z-index: 0;
-  right: -2vw; top: 2vh;
-  width: min(46vw, 600px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-  box-shadow: 0 40px 120px rgba(80, 70, 160, 0.18);
-}
-.orb video, .orb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero-text { position: relative; z-index: 1; }
-h1 {
-  font-family: var(--name); font-weight: 700;
-  font-size: clamp(4rem, 13vw, 12.5rem);
-  line-height: 0.86; letter-spacing: -0.06em;
-  margin: 0 0 0 -0.04em;
-}
-h1 span { display: block; }
-.lede {
-  font-family: var(--name); font-weight: 500;
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem); line-height: 1.2; letter-spacing: -0.02em;
-  max-width: 21ch; margin: 5vh 0 0;
-}
-.lede em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: 0; font-size: 1.08em; }
-.where { color: var(--muted); margin: 18px 0 0; max-width: 40ch; }
-.links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.hero { padding: 13vh 0 9vh; text-align: center; }
+h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; margin: 0; }
+.lede { font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 500; letter-spacing: -0.01em; line-height: 1.35; max-width: 30ch; margin: 22px auto 0; color: var(--ink); }
+.where { color: var(--muted); margin: 12px auto 0; max-width: 46ch; }
+.links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 10px 18px; border-radius: 999px; text-decoration: none;
-  font-size: 15px; font-weight: 500;
-  border: 1px solid var(--line); background: var(--bg);
-  transition: border-color 0.15s, transform 0.15s;
-  cursor: pointer; font-family: inherit; color: var(--ink);
+  padding: 10px 18px; border-radius: 999px;
+  font: 500 15px/1 var(--sans); color: var(--ink); cursor: pointer;
+  transition: transform .15s, background .15s;
 }
-.btn:hover { border-color: var(--ink); }
-.btn.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.btn.solid:hover { transform: translateY(-1px); }
-.arrow { font-size: 0.9em; opacity: 0.7; }
+.btn:hover { transform: translateY(-1px); background: var(--glass-strong); }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: transparent; }
+.btn.primary:hover { background: var(--ink); opacity: .9; }
+.arrow { opacity: .6; font-size: .9em; }
 
 /* research */
-.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding-top: 22px; margin-bottom: 28px; flex-wrap: wrap; }
-h2 { font-family: var(--name); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.5rem); letter-spacing: -0.05em; line-height: 1; margin: 0; }
-.section-head p { color: var(--muted); margin: 0; max-width: 46ch; }
-.section-head p a { color: var(--ink); }
-.bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.tile {
-  background: var(--tile); border-radius: 24px; padding: 22px 22px 24px;
-  display: flex; flex-direction: column; gap: 16px; min-width: 0; margin: 0;
-}
-.tile.wide { grid-column: 1 / -1; }
-.tile .media { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 14px; background: var(--line); }
-.sq { aspect-ratio: 1; object-fit: cover; }
-.zoom { border-radius: 14px; overflow: hidden; aspect-ratio: 1; background: #f6f4fb; }
-.zoom .media { transform: scale(1.16) translateY(2%); border-radius: 0; }
+section { padding-bottom: 40px; }
+.head { text-align: center; margin: 2vh 0 32px; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 700; letter-spacing: -0.03em; margin: 0; }
+.head p { color: var(--muted); margin: 8px auto 0; max-width: 52ch; }
+.head p a { color: var(--accent); }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.card { border-radius: 28px; padding: 14px 14px 22px; margin: 0; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.card.wide { grid-column: 1 / -1; }
+.frame { border-radius: 18px; overflow: hidden; background: rgba(0,0,0,0.04); border: 1px solid var(--hair); }
+.frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sq { aspect-ratio: 4 / 3; }
+.slot { aspect-ratio: 448 / 192; }
+.drones { aspect-ratio: 1400 / 402; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.pair .media { aspect-ratio: 4 / 3; object-fit: cover; }
-.slot { aspect-ratio: 448 / 192; object-fit: cover; }
-.drones { aspect-ratio: 1400 / 402; object-fit: cover; }
-.meta { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.tile h3 { font-family: var(--name); font-weight: 600; font-size: 1.3rem; letter-spacing: -0.02em; line-height: 1.2; margin: 4px 0 6px; text-wrap: balance; }
-.tile p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 70ch; }
-.tile p a { color: var(--ink); }
-.wide .txt { display: grid; grid-template-columns: 1fr 1.3fr; gap: 24px; align-items: end; }
-.key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 10px; font-size: 0.82rem; color: var(--muted); }
-.key i { display: inline-block; width: 16px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
-.sub2 { display: grid; grid-template-columns: 1fr 1fr; font-size: 0.82rem; color: var(--muted); margin-top: -8px; }
+.pair .frame { aspect-ratio: 4 / 3; }
+.zoom video { transform: scale(1.16) translateY(2%); }
+.body { padding: 0 8px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--muted); padding: 4px 10px; border-radius: 999px; background: var(--hair); }
+.card h3 { font-size: 1.22rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 12px 0 6px; text-wrap: balance; }
+.card p { margin: 0; color: var(--muted); font-size: .96rem; }
+.card p a { color: var(--accent); font-weight: 500; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; font-size: .82rem; color: var(--muted); }
+.key i { display: inline-block; width: 14px; height: 0; border-top: 3px solid; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.cap { display: grid; grid-template-columns: 1fr 1fr; font-size: .82rem; color: var(--muted); padding: 0 8px; margin-top: -8px; }
+.wide .body { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: end; }
 
-footer { padding-block: 64px 40px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+footer { margin: 40px auto 32px; padding: 16px 22px; border-radius: 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
 
-@media (max-width: 980px) {
-  .bento { grid-template-columns: 1fr 1fr; }
-  .bento .tile:nth-child(3) { grid-column: 1 / -1; }
-  .wide .txt { grid-template-columns: 1fr; gap: 6px; }
-}
-@media (max-width: 640px) {
-  .hero { padding-block: 0 56px; display: flex; flex-direction: column; }
-  .orb { position: relative; right: auto; top: auto; width: 78vw; margin: 8px 0 -16vw auto; }
-  h1 { font-size: 20vw; }
-  .bento { grid-template-columns: 1fr; }
-  .bento .tile:nth-child(3) { grid-column: auto; }
-  .top nav { gap: 16px; }
-  .clock { display: none; }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .wide .body { grid-template-columns: 1fr; gap: 0; }
+  .hero { padding: 10vh 0 7vh; }
+  .nav a { padding: 7px 10px; }
+  .nav .me { display: none; }
 }
 </style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+
+<nav class="nav glass" aria-label="Main">
+  <a class="me" href="#top">Shyaam Mahesh</a>
+  <a href="#research">Research</a>
+  <a href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+  <a href="https://github.com/IDZTPHKKKS" target="_blank" rel="noopener">GitHub</a>
+</nav>
 
 <div class="wrap">
-  <header class="top">
-    <a class="who" href="#top">Shyaam Mahesh</a>
-    <nav aria-label="Main">
-      <a href="#research">Research</a>
-      <a href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-      <a href="https://github.com/IDZTPHKKKS" target="_blank" rel="noopener">GitHub</a>
-      <span class="clock" id="clock"></span>
-    </nav>
+  <header class="hero" id="top">
+    <h1>Shyaam Mahesh</h1>
+    <p class="lede">Fluid mechanics, robotics, and knowing when a learned model can be trusted.</p>
+    <p class="where">Master's at IISc Bangalore. Mechanical engineering at BITS Pilani before that.</p>
+    <div class="links">
+      <a class="btn primary" href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">Resume <span class="arrow">&#8599;</span></a>
+      <a class="btn glass" href="#research">Research</a>
+      <a class="btn glass" href="https://www.linkedin.com/in/shyaam-mahesh-7b8341261/" target="_blank" rel="noopener">LinkedIn <span class="arrow">&#8599;</span></a>
+      <button class="btn glass" id="mail" type="button">shyaamchess@gmail.com</button>
+    </div>
   </header>
 
-  <section class="hero" id="top">
-    <div class="orb" aria-hidden="true">
-      <video src="media/kolmogorov.mp4" poster="media/kolmogorov.jpg" muted loop playsinline></video>
-    </div>
-    <div class="hero-text">
-      <h1><span>Shyaam</span><span>Mahesh</span></h1>
-      <p class="lede">I like <em>fluids</em>, <em>robots</em>, and figuring out when a learned model can actually be trusted.</p>
-      <p class="where">Master's in robotics at IISc Bangalore. Mechanical engineering at BITS Pilani before that.</p>
-      <div class="links">
-        <a class="btn solid" href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">Resume <span class="arrow">&#8599;</span></a>
-        <a class="btn" href="#research">Research</a>
-        <a class="btn" href="https://www.linkedin.com/in/shyaam-mahesh-7b8341261/" target="_blank" rel="noopener">LinkedIn <span class="arrow">&#8599;</span></a>
-        <button class="btn" id="mail" type="button">shyaamchess@gmail.com</button>
-      </div>
-    </div>
-  </section>
-
   <section id="research">
-    <div class="section-head">
+    <div class="head">
       <h2>Research</h2>
-      <p>Every clip here is rendered from my own simulation data. The full list is in my <a href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">resume</a>.</p>
+      <p>Every clip is rendered from my own simulation data. The full list is in my <a href="media/Shyaam_Mahesh_Resume.pdf" target="_blank" rel="noopener">resume</a>.</p>
     </div>
 
-    <div class="bento">
-      <figure class="tile">
-        <div class="zoom"><video class="media sq" src="media/poseidon3d.mp4" poster="media/poseidon3d.jpg" muted loop playsinline aria-label="3D view of the cylinder wake's Hopf bifurcation with model rollouts drifting between cycles"></video></div>
-        <div>
-          <span class="meta">IIT Madras &middot; Poseidon</span>
+    <div class="grid">
+      <figure class="card glass">
+        <div class="frame sq zoom"><video src="media/poseidon3d.mp4" poster="media/poseidon3d.jpg" muted loop playsinline aria-label="3D view of the cylinder wake's Hopf bifurcation with model rollouts"></video></div>
+        <div class="body"><div>
+          <span class="tag">IIT Madras · Poseidon</span>
           <h3>Where the foundation model's rollouts go</h3>
           <p>Each ring is the real wake cycle at one Reynolds number, stacked into the Hopf bifurcation. Fine-tuned Poseidon drifts every unseen case onto one training cycle; a fixed Re code keeps it on the right ring.</p>
-          <div class="key"><span><i style="border-color: var(--coral)"></i>no code</span><span><i style="border-color: var(--blue)"></i>with Re code</span></div>
-        </div>
+          <div class="key"><span><i style="border-color:#f06a3c"></i>no code</span><span><i style="border-color:#2f6fe4"></i>with Re code</span></div>
+        </div></div>
       </figure>
 
-      <figure class="tile">
-        <video class="media sq" src="media/kolmogorov.mp4" poster="media/kolmogorov.jpg" muted loop playsinline aria-label="Vorticity in forced 2D turbulence"></video>
-        <div>
-          <span class="meta">IIT Madras</span>
+      <figure class="card glass">
+        <div class="frame sq"><video src="media/kolmogorov.mp4" poster="media/kolmogorov.jpg" muted loop playsinline aria-label="Vorticity in forced 2D turbulence"></video></div>
+        <div class="body"><div>
+          <span class="tag">IIT Madras</span>
           <h3>What do neural surrogates generalise over?</h3>
           <p>On a fixed grid, Reynolds number and resolution get tangled. Over 200 models of 2D Kolmogorov turbulence to pull them apart.</p>
-        </div>
+        </div></div>
       </figure>
 
-      <figure class="tile">
-        <video class="media sq" src="media/navigation.mp4" poster="media/navigation.jpg" muted loop playsinline aria-label="Three vehicles crossing turbulence on routes planned from different forecasts"></video>
-        <div>
-          <span class="meta">IISc</span>
+      <figure class="card glass">
+        <div class="frame sq"><video src="media/navigation.mp4" poster="media/navigation.jpg" muted loop playsinline aria-label="Vehicles crossing turbulence on routes planned from different forecasts"></video></div>
+        <div class="body"><div>
+          <span class="tag">IISc</span>
           <h3>Better forecast, better route?</h3>
           <p>Planning through turbulence with learned forecasts. The most accurate one doesn't always get you there first.</p>
-          <div class="key"><span><i style="border-color: var(--ink)"></i>true flow</span><span><i style="border-color: var(--blue)"></i>FNO</span><span><i style="border-color: var(--coral); border-top-style: dashed"></i>lowest error</span></div>
-        </div>
+          <div class="key"><span><i style="border-color:currentColor"></i>true flow</span><span><i style="border-color:#2f6fe4"></i>FNO</span><span><i style="border-color:#f06a3c;border-top-style:dashed"></i>lowest error</span></div>
+        </div></div>
       </figure>
 
-      <figure class="tile wide">
-        <video class="media slot" src="media/slotted.mp4" poster="media/slotted.jpg" muted loop playsinline aria-label="Vortex shedding behind a slotted elliptical cylinder"></video>
-        <div class="txt">
-          <div>
-            <span class="meta">IIT Madras &middot; Physics of Fluids</span>
-            <h3>Wakes behind slotted elliptical cylinders</h3>
-          </div>
-          <p>How a slot, the body's shape and a shear-thinning fluid change drag and vortex shedding. <a href="https://doi.org/10.1063/5.0332123" target="_blank" rel="noopener">Paper</a>. The clip is a Newtonian rerun at Re&nbsp;150 with my spectral solver.</p>
-        </div>
-      </figure>
-
-      <figure class="tile wide">
+      <figure class="card glass">
         <div class="pair">
-          <video class="media" src="media/go2_a.mp4" poster="media/go2_a.jpg" muted loop playsinline aria-label="Future A: the quadruped recovers"></video>
-          <video class="media" src="media/go2_b.mp4" poster="media/go2_b.jpg" muted loop playsinline aria-label="Future B: the quadruped falls"></video>
+          <div class="frame"><video src="media/go2_a.mp4" poster="media/go2_a.jpg" muted loop playsinline aria-label="The quadruped recovers"></video></div>
+          <div class="frame"><video src="media/go2_b.mp4" poster="media/go2_b.jpg" muted loop playsinline aria-label="The quadruped falls"></video></div>
         </div>
-        <div class="sub2"><span>Recovers</span><span>Falls</span></div>
-        <div class="txt">
-          <div>
-            <span class="meta">IISc</span>
-            <h3>Will the robot fall?</h3>
-          </div>
+        <div class="cap"><span>Recovers</span><span>Falls</span></div>
+        <div class="body"><div>
+          <span class="tag">IISc</span>
+          <h3>Will the robot fall?</h3>
           <p>Same robot, same moment, a different push. I check whether learned world models of a quadruped get these rare outcomes right.</p>
+        </div></div>
+      </figure>
+
+      <figure class="card glass wide">
+        <div class="frame slot"><video src="media/slotted.mp4" poster="media/slotted.jpg" muted loop playsinline aria-label="Vortex shedding behind a slotted elliptical cylinder"></video></div>
+        <div class="body">
+          <div><span class="tag">IIT Madras · Physics of Fluids</span><h3>Wakes behind slotted elliptical cylinders</h3></div>
+          <p>How a slot, the body's shape and a shear-thinning fluid change drag and vortex shedding. <a href="https://doi.org/10.1063/5.0332123" target="_blank" rel="noopener">Paper&nbsp;&#8599;</a></p>
         </div>
       </figure>
 
-      <figure class="tile wide">
-        <video class="media drones" src="media/sybil.mp4" poster="media/sybil.jpg" muted loop playsinline aria-label="Drones exploring a building with and without the defence"></video>
-        <div class="sub2"><span>No defence</span><span>With defence</span></div>
-        <div class="txt">
-          <div>
-            <span class="meta">BITS Pilani &middot; arXiv</span>
-            <h3>Drones that don't blindly trust each other</h3>
-          </div>
-          <p>One fake teammate can leave a quarter of a building unexplored (red). Our defences only use what each drone can see for itself. <a href="https://arxiv.org/abs/2610.33906" target="_blank" rel="noopener">Preprint</a></p>
+      <figure class="card glass wide">
+        <div class="frame drones"><video src="media/sybil.mp4" poster="media/sybil.jpg" muted loop playsinline aria-label="Drones exploring a building with and without the defence"></video></div>
+        <div class="cap"><span>No defence</span><span>With defence</span></div>
+        <div class="body">
+          <div><span class="tag">BITS Pilani · arXiv</span><h3>Drones that don't blindly trust each other</h3></div>
+          <p>One fake teammate can leave a quarter of a building unexplored. Our defences only use what each drone can see for itself. <a href="https://arxiv.org/abs/2610.33906" target="_blank" rel="noopener">Preprint&nbsp;&#8599;</a></p>
         </div>
       </figure>
     </div>
   </section>
 
-  <footer>
+  <footer class="glass">
     <span>Shyaam Mahesh, 2026</span>
     <span>Chess, ultimate frisbee and too many simulations.</span>
   </footer>
@@ -248,33 +242,24 @@ footer { padding-block: 64px 40px; color: var(--muted); font-size: 13px; display
 
 <script>
 (function () {
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // play clips only while they are on screen
-  const vids = [...document.querySelectorAll('video')];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vids = Array.prototype.slice.call(document.querySelectorAll('video'));
   if (!reduce) {
     if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) { const p = e.target.play(); p && p.catch(() => {}); } else e.target.pause();
-      }), { threshold: 0.15 });
-      vids.forEach(v => io.observe(v));
-    } else vids.forEach(v => { const p = v.play(); p && p.catch(() => {}); });
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { var p = e.target.play(); if (p) p.catch(function () {}); } else e.target.pause();
+        });
+      }, { threshold: 0.15 });
+      vids.forEach(function (v) { io.observe(v); });
+    } else vids.forEach(function (v) { var p = v.play(); if (p) p.catch(function () {}); });
   }
-
-  // local time in Bengaluru
-  const clock = document.getElementById('clock');
-  function tick() {
-    try {
-      clock.textContent = 'Bengaluru ' + new Date().toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' });
-    } catch (e) { clock.textContent = ''; }
-  }
-  tick(); setInterval(tick, 20000);
-
-  // copy email
-  const mail = document.getElementById('mail'), addr = 'shyaamchess@gmail.com';
-  mail.addEventListener('click', () => {
-    const done = t => { mail.textContent = t; setTimeout(() => { mail.textContent = addr; }, 1600); };
-    try { navigator.clipboard.writeText(addr).then(() => done('Copied'), () => done(addr)); } catch (e) { done(addr); }
+  var mail = document.getElementById('mail'), addr = 'shyaamchess@gmail.com';
+  mail.addEventListener('click', function () {
+    function done(t) { mail.textContent = t; setTimeout(function () { mail.textContent = addr; }, 1600); }
+    try { navigator.clipboard.writeText(addr).then(function () { done('Copied'); }, function () { done(addr); }); } catch (e) { done(addr); }
   });
 })();
 </script>
+</body>
+</html>
